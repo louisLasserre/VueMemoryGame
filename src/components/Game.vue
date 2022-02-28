@@ -22,41 +22,51 @@ export default {
         cardClick(e, i){
             console.log("i", i)
 
-            
+            console.log("first return : ", this.firstReturn)
+            console.log("actuel id", e['srcElement']['id'])
             if(this.firstReturn == null){
-                this.firstReturn = i
-                //e['srcElement']['id']
+                this.PfirstReturn = i
+                this.firstReturn = e['srcElement']['id']
                 let first = true
-                this.show(i, first)
+                
+
+                this.dictShow[i]["un"] = e['srcElement']['id']
             }else{
                 let first = false
-                this.show(i, first)
-                if(this.firstReturn == e['srcElement']['id']){
+                
+                if(this.PfirstReturn == i){
+
+                    alert("double click")
+
+
+                }else if(this.firstReturn == e['srcElement']['id']){
                     this.score += 1
                     console.log("trouvé")
+                    this.dictShow[i]["un"] = e['srcElement']['id'] //deuxième
+
                     this.firstReturn = null
 
                 }else{
                     console.log("trompé")
+                    this.dictShow[i]["un"] = e['srcElement']['id']
+
+                    setTimeout(() => {
+                        this.dictShow[i]["un"] = null
+                        this.dictShow[this.PfirstReturn]["un"] = null
+                    }, 1500)
+                    
+
                     this.firstReturn = null
                 }
             }
             
         },
-        show(i, first){
+        show(i, first, e){
             console.log("first return : ",this.firstReturn)
 
             
-            if(first == false){
-                if(this.firstReturn == i){
-                alert("double click")
-
-                }else{
-                this.dictShow[i]["un"] = "deux"
-                }
-            }else{
-                this.dictShow[i]["un"] = "premier"
-            }
+           
+            
             
             
 
@@ -80,7 +90,8 @@ export default {
             dictShow: [],
 
             numberOne: null,
-            numberTwo: null
+            numberTwo: null,
+            PfirstReturn: null
         }
     },
     mounted(){
