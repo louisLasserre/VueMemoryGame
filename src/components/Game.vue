@@ -3,8 +3,8 @@
     <p ref="super ref">Vous avez trouvé {{ score }} paires</p>
 
     <div v-if="ismounted">
-        <div v-for="n in parseInt(nbrCards)" :id="orderArray[n-1]"  class="card" @click="cardClick">
-            <article @click="show(n-1)">{{ this.dictShow[n-1]["un"] }}</article>
+        <div v-for="n in parseInt(nbrCards)" :id="orderArray[n-1]"  class="card" @click="cardClick($event, n-1)">
+            {{ this.dictShow[n-1]["un"] }}
         </div>
     </div>  
     
@@ -19,39 +19,50 @@
 <script>
 export default {
     methods: {
-        cardClick(e){
-            // console.log(this.$refs)
+        cardClick(e, i){
+            console.log("i", i)
+
             
             if(this.firstReturn == null){
-                this.firstReturn = e['srcElement']['id']
+                this.firstReturn = i
+                //e['srcElement']['id']
+                let first = true
+                this.show(i, first)
             }else{
+                let first = false
+                this.show(i, first)
                 if(this.firstReturn == e['srcElement']['id']){
                     this.score += 1
                     console.log("trouvé")
                     this.firstReturn = null
 
                 }else{
-                    console.log("erreur")
+                    console.log("trompé")
                     this.firstReturn = null
                 }
             }
             
         },
-        show(i){
+        show(i, first){
             console.log("first return : ",this.firstReturn)
 
             
-            if(this.firstReturn != null){
-                if(this.firstReturn == i+1){
-                    alert("double click")
-                }else{
-                    this.dictShow[i]["un"] = "deux"
-                }
-                
+            if(first == false){
+                if(this.firstReturn == i){
+                alert("double click")
 
+                }else{
+                this.dictShow[i]["un"] = "deux"
+                }
             }else{
                 this.dictShow[i]["un"] = "premier"
             }
+            
+            
+
+        
+            
+            
             
         }
         
