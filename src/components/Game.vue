@@ -1,10 +1,12 @@
 <template>
-    
+    <p>{{nbrCards}}</p>
     <p ref="super ref">Vous avez trouvé {{ score }} paires</p>
 
     <div v-if="ismounted">
         <div v-for="n in parseInt(nbrCards)" :id="orderArray[n-1]"  class="card" @click="cardClick($event, n-1)">
+            carte numéro :
             {{ this.dictShow[n-1]["un"] }}
+
         </div>
     </div>  
     
@@ -18,6 +20,9 @@
 
 <script>
 export default {
+    props: [
+        "nbrCards"
+    ],
     methods: {
         cardClick(e, i){
             console.log("i", i)
@@ -41,10 +46,13 @@ export default {
 
                 }else if(this.firstReturn == e['srcElement']['id']){
                     this.score += 1
-                    console.log("trouvé")
+                    
                     this.dictShow[i]["un"] = e['srcElement']['id'] //deuxième
 
                     this.firstReturn = null
+                    if(this.score >= this.nbrCards/2){
+                        this.$emit("win")
+                    }
 
                 }else{
                     console.log("trompé")
@@ -61,27 +69,13 @@ export default {
             }
             
         },
-        show(i, first, e){
-            console.log("first return : ",this.firstReturn)
-
-            
-           
-            
-            
-            
-
-        
-            
-            
-            
-        }
         
     },
     data(){
         return{
             firstReturn: null,
             score: 0,
-            nbrCards: 4,
+            
             orderArray: null,
             numberArray: null,
             ismounted: false,
@@ -133,7 +127,7 @@ export default {
             
          
          console.log("final", this.orderArray)
-         this.ismounted = true
+         
 
         for(let k=1; k < (this.nbrCards + 1); k++){
             this.dictShow.push({
@@ -145,7 +139,7 @@ export default {
         console.log("dictionnaire : ", this.dictShow)
         
         console.log(this.dictShow[0]["un"])
-        
+        this.ismounted = true
      
     }
 
